@@ -10,7 +10,7 @@ gem 'sinatra-flash', :require => 'sinatra/flash'
 
 # Component requirements
 gem 'erubis', "~> 2.7.0"
-gem 'mongoid'
+gem 'mongoid', "2.4.0"
 gem 'bson_ext', :require => "mongo"
 
 # Test requirements
