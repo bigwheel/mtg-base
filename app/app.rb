@@ -56,4 +56,7 @@ class MtgPackGenerator < Padrino::Application
   #     render 'errors/505'
   #   end
   #
+  get '/' do
+    p 'Hello, World!'
+  end
 end
