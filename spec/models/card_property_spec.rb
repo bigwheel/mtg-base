@@ -1,8 +1,25 @@
+# -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe "CardProperty Model" do
-  let(:card_property) { CardProperty.new }
+describe CardProperty, "Model" do
+  before { described_class.delete_all }
   it 'can be created' do
-    card_property.should_not be_nil
+    should_not be_nil
+  end
+  it do
+    acidic_slime = { card_name: 'Acidic Slime', mana_cost: [3, :green, :green],
+      converted_mana_cost: 5, types: 'Creature  — Ooze',
+      card_text: '<div class="cardtextbox">Deathtouch <i>' +
+      '(Any amount of damage this deals to a creature is ' +
+      'enough to destroy it.)</i></div><div class="cardte' +
+      'xtbox">When Acidic Slime enters the battlefield, d' +
+      'estroy target artifact, enchantment, or land.</div>',
+      p_t: '2 / 2', expansion: 'Magic 2013',
+      rarity: 'Uncommon', all_sets: ['Magic 2010 (Uncommon)',
+        'Magic 2011 (Uncommon)', 'Magic 2012 (Uncommon)',
+        'Magic 2013 (Uncommon)',
+        'Magic: The Gathering-Commander (Uncommon)'],
+        card_number: 159, artist: 'Karl Kopinski' }
+    described_class.create(265718).should == described_class.new(acidic_slime)
   end
 end
