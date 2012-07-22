@@ -46,7 +46,10 @@ class SearchUrl < UrlWithParams
 
   private
   def params_filter(params)
-    params[:set] = '["' + params[:set] + '"]' if params.has_key?(:set)
+    if params.has_key?(:set)
+      params = params.dup
+      params[:set] = '["' + params[:set] + '"]'
+    end
     params
   end
 end
