@@ -67,19 +67,60 @@ class CardProperty
   # You can create a composite key in mongoid to replace the default id using the key macro:
   # key :field <, :another_field, :one_more ....>
 
-  private
-  def self.value_from_label_name(label_name, value_when_not_found = '')
-    label_node = @nokogiri_doc.at_xpath(
-      "//div[@class='label'][contains(text(), '#{label_name}')]")
-      if label_node == nil
-        value_when_not_found
-      else
-        node = label_node.parent.at_xpath("div[@class='value']")
-        if block_given?
-          yield node
-        else
-          node.content.strip
-        end
+  def CardProperty.create_from_id multiverseid
+    url = UrlWithParams.new('http://gatherer.wizards.com/Pages/Card/Details.aspx',
+                            multiverseid: multiverseid)
+    doc = Nokogiri::HTML(open(url.concat))
+
+    card_name = value_of_label(doc, 'Card Name')
+    mana_cost = value_of_label(doc, 'Mana Cost') do |node|
+      node.xpath('img/@alt').map do |alt|
+        alt.content.strip
       end
+    end
+    converted_mana_cost = value_of_label(doc, 'Converted Mana Cost')
+    types = value_of_label(doc, 'Types')
+    card_text = value_of_label(doc, 'Card Text') do |node|
+      node.inner_html.strip
+    end
+    flavor_text = value_of_label(doc, 'Flavor Text') do |node|
+      node.inner_html.strip
+    end
+    p_t = value_of_label(doc, 'P/T')
+    expansion = value_of_label(doc, 'Expansion') do |node|
+      node.at_xpath("div/a[contains(@href, 'Pages/Search')]").content.strip
+    end
+    rarity = value_of_label(doc, 'Rarity') do |node|
+      node.at_xpath('span').content.strip
+    end
+    all_sets = value_of_label(doc, 'All Sets', []) do |node|
+      node.xpath('div/a/img/@alt').map do |alt|
+        alt.content.strip
+      end
+    end
+    card_number = value_of_label(doc, 'Card #')
+    artist = value_of_label(doc, 'Artist') do |node|
+      node.at_xpath('a').content.strip
+    end
+    create!(card_name: card_name, mana_cost: mana_cost,
+             converted_mana_cost: converted_mana_cost, types: types,
+             card_text: card_text, flavor_text: flavor_text, p_t: p_t,
+             expansion: expansion, rarity: rarity, all_sets: all_sets,
+             card_number: card_number, artist: artist)
+  end
+
+  private
+  def CardProperty.value_of_label(nokogiri_doc, label_name, value_when_not_found = '')
+    label_node = nokogiri_doc.at_xpath("//div[@class='label'][contains(text(), '#{label_name}')]")
+    if label_node == nil
+      value_when_not_found
+    else
+      node = label_node.parent.at_xpath("div[@class='value']")
+      if block_given?
+        yield node
+      else
+        node.content.strip
+      end
+    end
   end
 end
