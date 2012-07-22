@@ -31,3 +31,4 @@ gem 'padrino', '0.10.7'
 # end
 
 gem 'thin'
+gem 'nokogiri'
