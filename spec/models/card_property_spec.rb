@@ -20,6 +20,8 @@ describe CardProperty, "Model" do
         'Magic 2013 (Uncommon)',
         'Magic: The Gathering-Commander (Uncommon)'],
         card_number: 159, artist: 'Karl Kopinski' }
+
+    stub(OpenURI).open_uri { open('./spec/dummy/acidic_slime.html', 'r') }
     described_class.create_from_id(265718).should == described_class.new(acidic_slime)
   end
   it do
