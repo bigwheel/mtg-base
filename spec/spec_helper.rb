@@ -12,3 +12,5 @@ def app
   #   Padrino.application
   MtgPackGenerator.tap { |app|  }
 end
+
+Mongoid.logger.level = Logger::INFO
