@@ -20,6 +20,9 @@ describe CardProperty, "Model" do
         'Magic 2013 (Uncommon)',
         'Magic: The Gathering-Commander (Uncommon)'],
         card_number: 159, artist: 'Karl Kopinski' }
-    described_class.create(265718).should == described_class.new(acidic_slime)
+    described_class.create_from_id(265718).should == described_class.new(acidic_slime)
+  end
+  it do
+    expect { subject.value_from_label_name }.to raise_error(NoMethodError)
   end
 end

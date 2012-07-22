@@ -66,4 +66,20 @@ class CardProperty
 
   # You can create a composite key in mongoid to replace the default id using the key macro:
   # key :field <, :another_field, :one_more ....>
+
+  private
+  def self.value_from_label_name(label_name, value_when_not_found = '')
+    label_node = @nokogiri_doc.at_xpath(
+      "//div[@class='label'][contains(text(), '#{label_name}')]")
+      if label_node == nil
+        value_when_not_found
+      else
+        node = label_node.parent.at_xpath("div[@class='value']")
+        if block_given?
+          yield node
+        else
+          node.content.strip
+        end
+      end
+  end
 end
