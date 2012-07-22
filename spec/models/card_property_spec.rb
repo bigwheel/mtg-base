@@ -8,7 +8,8 @@ describe CardProperty, "Model" do
   end
   describe 'Acidic Slime' do
     subject do
-      stub(OpenURI).open_uri { open('./spec/dummy/acidic_slime.html', 'r') }
+      mock(OpenURI).open_uri(CardUrl.new(multiverseid: 265718).concat).
+        returns(open('./spec/dummy/acidic_slime.html', 'r'))
       described_class.create_from_id(265718)
     end
     its(:card_name) { should == 'Acidic Slime' }
