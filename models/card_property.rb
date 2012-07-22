@@ -27,21 +27,28 @@ class UrlWithParams
   end
 end
 
-class GathererUrl < UrlWithParams
+class CardUrl < UrlWithParams
   def initialize(params = {})
-    gatherer_url = 'http://gatherer.wizards.com/Pages/Search/Default.aspx'
-    super(gatherer_url, params_filter(params))
+    card_url = 'http://gatherer.wizards.com/Pages/Card/Details.aspx'
+    super(card_url, params)
+  end
+end
+
+class SearchUrl < UrlWithParams
+  def initialize(params = {})
+    search_url = 'http://gatherer.wizards.com/Pages/Search/Default.aspx'
+    super(search_url, params_filter(params))
   end
 
   def append_params new_params
     super(params_filter(new_params))
   end
 
+  private
   def params_filter(params)
     params[:set] = '["' + params[:set] + '"]' if params.has_key?(:set)
     params
   end
-  private :params_filter
 end
 
 class CardProperty
@@ -68,8 +75,7 @@ class CardProperty
   # key :field <, :another_field, :one_more ....>
 
   def CardProperty.create_from_id multiverseid
-    url = UrlWithParams.new('http://gatherer.wizards.com/Pages/Card/Details.aspx',
-                            multiverseid: multiverseid)
+    url = CardUrl.new(multiverseid: multiverseid)
     doc = Nokogiri::HTML(open(url.concat))
 
     card_name = value_of_label(doc, 'Card Name')
@@ -103,10 +109,10 @@ class CardProperty
       node.at_xpath('a').content.strip
     end
     create!(card_name: card_name, mana_cost: mana_cost,
-             converted_mana_cost: converted_mana_cost, types: types,
-             card_text: card_text, flavor_text: flavor_text, p_t: p_t,
-             expansion: expansion, rarity: rarity, all_sets: all_sets,
-             card_number: card_number, artist: artist)
+            converted_mana_cost: converted_mana_cost, types: types,
+            card_text: card_text, flavor_text: flavor_text, p_t: p_t,
+            expansion: expansion, rarity: rarity, all_sets: all_sets,
+            card_number: card_number, artist: artist)
   end
 
   private
