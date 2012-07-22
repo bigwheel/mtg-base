@@ -3,9 +3,17 @@ class CardProperty
   include Mongoid::Timestamps # adds created_at and updated_at fields
 
   # field <name>, :type => <type>, :default => <value>
-  field :name, :type => String
-  field :age, :type => Integer
-  field :email, :type => String
+  field :card_name,           :type => String
+  field :mana_cost,           :type => Array
+  field :converted_mana_cost, :type => Integer
+  field :types,               :type => String
+  field :card_text,           :type => String
+  field :p_t,                 :type => String
+  field :expansion,           :type => String
+  field :rarity,              :type => String
+  field :all_sets,            :type => Array
+  field :card_number,         :type => Integer
+  field :artist,              :type => String
 
   # You can define indexes on documents using the index macro:
   # index :field <, :unique => true>
