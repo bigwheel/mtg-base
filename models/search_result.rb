@@ -1,12 +1,12 @@
 class SearchResult
-  attr_reader :urls
+  attr_reader :multiverseids
   def initialize params
     base_url = SearchUrl.new(params)
     doc = Nokogiri::HTML(open(base_url.concat))
 
     page_size = (self.class.result_number(doc) / 25.0).ceil
 
-    @urls = (0...page_size).map do |page_number|
+    @multiverseids = (0...page_size).map do |page_number|
       self.class.multiverseids(base_url, page_number)
     end.flatten
   end
