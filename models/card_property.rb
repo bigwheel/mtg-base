@@ -64,6 +64,7 @@ class CardProperty
   field :converted_mana_cost, :type => Integer
   field :types,               :type => String
   field :card_text,           :type => String
+  field :flavor_text,         :type => String
   field :p_t,                 :type => String
   field :expansion,           :type => String
   field :rarity,              :type => String
