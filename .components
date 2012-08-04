@@ -3,6 +3,6 @@
 :test: rspec
 :mock: rr
 :script: jquery
-:renderer: haml
+:renderer: erb
 :stylesheet: none
-:admin_renderer: haml
+:admin_renderer: erb
