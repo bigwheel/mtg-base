@@ -1,5 +1,5 @@
 MtgPackGenerator.controller do
   get :index do
-    p 'Hello, World!'
+    render 'index'
   end
 end

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      <%= [@title, 'MTG Pack Generator'].compact.join(' | ') %>
+    </title>
+    <%= stylesheet_link_tag 'foundation' %>
+    <%= stylesheet_link_tag 'app' %>
+    <%= javascript_include_tag 'modernizr.foundation.js' %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
