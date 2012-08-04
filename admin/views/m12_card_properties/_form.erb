@@ -1,0 +1,55 @@
+<div class="group">
+  <%= f.label :_type %><%= f.error_message_on :_type %>
+  <%= f.text_field :_type, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :_id %><%= f.error_message_on :_id %>
+  <%= f.text_field :_id, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :card_name %><%= f.error_message_on :card_name %>
+  <%= f.text_field :card_name, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :converted_mana_cost %><%= f.error_message_on :converted_mana_cost %>
+  <%= f.text_field :converted_mana_cost, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :card_text %><%= f.error_message_on :card_text %>
+  <%= f.text_field :card_text, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :flavor_text %><%= f.error_message_on :flavor_text %>
+  <%= f.text_field :flavor_text, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :expansion %><%= f.error_message_on :expansion %>
+  <%= f.text_field :expansion, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :rarity %><%= f.error_message_on :rarity %>
+  <%= f.text_field :rarity, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :card_number %><%= f.error_message_on :card_number %>
+  <%= f.text_field :card_number, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+<div class="group">
+  <%= f.label :artist %><%= f.error_message_on :artist %>
+  <%= f.text_field :artist, :class => :text_field %>
+  <span class="description">Ex: a simple text</span>
+</div>
+
+<div class="group navform wat-cf">
+  <%= f.submit pat(:save), :class => :button %>
+  <%= f.submit pat(:cancel), :onclick => "window.location='#{url(:m12_card_properties, :index)}';return false", :class => :button %>
+</div>

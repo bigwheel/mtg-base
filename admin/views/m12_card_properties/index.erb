@@ -1,0 +1,54 @@
+<div class="block">
+  <div class="secondary-navigation">
+    <ul class="wat-cf">
+      <li class="first active"><%= link_to pat(:list), url(:m12_card_properties, :index) %></li>
+      <li><%= link_to pat(:new), url(:m12_card_properties, :new) %></li>
+    </ul>
+  </div>
+  <div class="content">
+    <h2 class="title"><%= pat(:all) %> <% mt(:m12_card_properties) %></h2>
+    <div class="inner">
+      <table class="table">
+        <tr>
+          <th class="first"><%= mat(:m12_card_property, :_type) %></th>
+          <th><%= mat(:m12_card_property, :_id) %></th>
+          <th><%= mat(:m12_card_property, :created_at) %></th>
+          <th><%= mat(:m12_card_property, :updated_at) %></th>
+          <th><%= mat(:m12_card_property, :card_name) %></th>
+          <th><%= mat(:m12_card_property, :converted_mana_cost) %></th>
+          <th><%= mat(:m12_card_property, :card_text) %></th>
+          <th><%= mat(:m12_card_property, :flavor_text) %></th>
+          <th><%= mat(:m12_card_property, :expansion) %></th>
+          <th><%= mat(:m12_card_property, :rarity) %></th>
+          <th><%= mat(:m12_card_property, :card_number) %></th>
+          <th><%= mat(:m12_card_property, :artist) %></th>
+          <th class="last">&nbsp;</th>
+        </tr>
+        <% @m12_card_properties.each do |m12_card_property| %>
+        <tr>
+          <td class="first"><%= m12_card_property._type %></td>
+          <td><%= m12_card_property._id %></td>
+          <td><%= m12_card_property.created_at %></td>
+          <td><%= m12_card_property.updated_at %></td>
+          <td><%= m12_card_property.card_name %></td>
+          <td><%= m12_card_property.converted_mana_cost %></td>
+          <td><%= m12_card_property.card_text %></td>
+          <td><%= m12_card_property.flavor_text %></td>
+          <td><%= m12_card_property.expansion %></td>
+          <td><%= m12_card_property.rarity %></td>
+          <td><%= m12_card_property.card_number %></td>
+          <td><%= m12_card_property.artist %></td>
+          <td class="last">
+            <%= button_to pat(:edit), url(:m12_card_properties, :edit, :id => m12_card_property.id), :method => :get, :class => :button_to %> |
+            <%= button_to pat(:delete), url(:m12_card_properties, :destroy, :id => m12_card_property.id), :method => :delete, :class => :button_to, :onsubmit => "return confirm('#{pat(:confirm)}')" %>
+          </td>
+        </tr>
+        <% end %>
+      </table>
+      <div class="actions-bar wat-cf">
+        <div class="actions"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :sidebar, partial("base/sidebar") %>
