@@ -13,6 +13,10 @@ class M12CardProperty
   ALL_RARITY_LIST = [:'Mythic Rare', :Rare, :Uncommon, :Common, :'Basic Land']
 
   # field <name>, :type => <type>, :default => <value>
+  field :multiverseid,        :type => Integer
+  validates_presence_of :multiverseid
+  validates_numericality_of :multiverseid, only_integer: true, greater_than_or_equal_to: 1
+
   field :card_name,           :type => String
   validates_presence_of :card_name
   validates_format_of :card_name, :with => STRIPED_TEXT_REGEXP
@@ -62,47 +66,51 @@ class M12CardProperty
   # You can create a composite key in mongoid to replace the default id using the key macro:
   # key :field <, :another_field, :one_more ....>
 
-  def self.create_from_id multiverseid
-    url = CardUrl.new(multiverseid: multiverseid)
-    doc = Nokogiri::HTML(open(url.concat))
-
-    card_property = parse_doc(doc)
-    card_property.save!
-    card_property
+  def initialize(attrs = nil, options = nil)
+    if options != nil && options.has_key?(:multiverseid)
+      url = CardUrl.new(multiverseid: options[:multiverseid])
+      doc = Nokogiri::HTML(open(url.concat))
+      new_attrs = self.class.parse_doc(doc)
+      new_attrs[:multiverseid] = options[:multiverseid]
+      options.delete(:multiverseid)
+      merged_attrs = attrs == nil ? new_attrs : attrs.merge(new_attrs)
+      super(merged_attrs, options)
+    else
+      super
+    end
   end
 
   private
   def self.parse_doc(doc)
     card_name = value_of_label(doc, 'Card Name')
+    mana_cost = ManaCost.new_alternative(node_by_label(doc, 'Mana Cost'))
     converted_mana_cost = value_of_label(doc, 'Converted Mana Cost')
+    type = Type.new_alternative(node_by_label(doc, 'Types'))
     card_text = value_of_label(doc, 'Card Text') do |node|
       node.inner_html.strip
     end
     flavor_text = value_of_label(doc, 'Flavor Text') do |node|
       node.inner_html.strip
     end
+    p_t = PT.new_alternative(node_by_label(doc, 'P/T'))
     expansion = value_of_label(doc, 'Expansion') do |node|
       node.at_xpath("div/a[contains(@href, 'Pages/Search')]").content.strip
     end
     rarity = value_of_label(doc, 'Rarity') do |node|
       node.at_xpath('span').content.strip.to_sym
     end
+    all_sets = AllSet.news_alternative(node_by_label(doc, 'All Sets'))
     card_number = value_of_label(doc, 'Card #')
     artist = value_of_label(doc, 'Artist') do |node|
       node.at_xpath('a').content.strip
     end
 
-    property = { card_name: card_name,
-                 converted_mana_cost: converted_mana_cost,
+    property = { card_name: card_name, mana_cost: mana_cost,
+                 type: type, converted_mana_cost: converted_mana_cost,
                  card_text: card_text, flavor_text: flavor_text,
-                 expansion: expansion, rarity: rarity,
-                 card_number: card_number, artist: artist }
-    card_property = new(property.select { |e| e != nil })
-    card_property.mana_cost = ManaCost.new_alternative(node_by_label(doc, 'Mana Cost'))
-    card_property.p_t = PT.new_alternative(node_by_label(doc, 'P/T'))
-    card_property.type = Type.new_alternative(node_by_label(doc, 'Types'))
-    card_property.all_sets.concat(AllSet.news_alternative(node_by_label(doc, 'All Sets')))
-    card_property
+                 p_t: p_t, expansion: expansion, rarity: rarity,
+                 all_sets: all_sets, card_number: card_number, artist: artist }
+    property.reject { |k, v| v == nil }
   end 
   def self.node_by_label(nokogiri_doc, label_name)
     nokogiri_doc.at_xpath("//div[@class='label'][contains(text(), '#{label_name}')]/../div[@class='value']")
