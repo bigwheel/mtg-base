@@ -1,14 +1,22 @@
 development:
-  host: localhost
-  database: app_development
+  sessions:
+    default:
+      database: mtg_pack_generator_development
+      hosts:
+        - localhost:27017
 
 test:
-  host: localhost
-  database: app_test
+  sessions:
+    default:
+      database: mtg_pack_generator_test
+      hosts:
+        - localhost:27017
 
 # set these environment variables on your prod server
 production:
-  uri: <%= ENV['MONGOLAB_URI'] %>
+  sessions:
+    default:
+      uri: <%= ENV['MONGOLAB_URI'] %>
   # slaves:
   #   - host: slave1.local
   #     port: 27018

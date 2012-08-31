@@ -32,7 +32,7 @@ class Admin < Padrino::Application
   end
 
   access_control.roles_for :admin do |role|
-    role.project_module :m12_card_properties, '/m12_card_properties'
+    role.project_module :card_properties, '/card_properties'
     role.project_module :accounts, '/accounts'
   end
 end

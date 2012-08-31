@@ -1,0 +1,18 @@
+<div class="block">
+  <div class="secondary-navigation">
+    <ul class="wat-cf">
+      <li class="first"><%= link_to pat(:list), url(:card_properties, :index) %></li>
+      <li><%= link_to pat(:new), url(:card_properties, :new) %></li>
+      <li class="active"><%= link_to pat(:edit), url(:card_properties, :edit, :id => @card_property.id) %></li>
+    </ul>
+  </div>
+  <div class="content">
+    <h2 class="title"><%= pat(:edit) %> <% mt(:card_property) %></h2>
+    <div class="inner">
+      <% form_for :card_property, url(:card_properties, :update, :id => @card_property.id), :method => :put, :class => :form do |f| %>
+        <%= partial "card_properties/form", :locals => { :f => f } %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :sidebar, partial("base/sidebar") %>

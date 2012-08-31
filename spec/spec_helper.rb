@@ -10,6 +10,7 @@ end
 RSpec.configure do |conf|
   conf.mock_with :rr
   conf.include Rack::Test::Methods
+  conf.tty = true
   conf.treat_symbols_as_metadata_keys_with_true_values = true
 end
 

@@ -11,8 +11,8 @@ gem 'sinatra-flash', :require => 'sinatra/flash'
 # Component requirements
 gem 'bcrypt-ruby', :require => "bcrypt"
 gem 'erubis', "~> 2.7.0"
-gem 'mongoid', "~> 2.4"
-gem 'bson_ext', "~> 1.5", :require => "mongo"
+gem 'mongoid'
+gem 'bson_ext'
 
 # Test requirements
 gem 'rr', :group => "test"
@@ -36,3 +36,4 @@ gem 'fakeweb'
 gem 'vcr'
 gem 'pry'
 gem 'pry-padrino'
+gem 'gatherer-scraper', '0.0.1', path: '~/gatherer-scraper/', require: 'gatherer-scraper'
