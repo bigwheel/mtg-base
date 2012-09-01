@@ -1,7 +1,8 @@
-PATH
-  remote: ~/gatherer-scraper/
+GIT
+  remote: git://github.com/bigwheel/gatherer-scraper.git
+  revision: 5781c8a000ecbf8aedb2d85079c73fa7bbfff9ef
   specs:
-    gatherer-scraper (0.0.1)
+    gatherer-scraper (1.0.0)
       activemodel (~> 3.2.0)
       nokogiri
 
@@ -122,7 +123,7 @@ DEPENDENCIES
   bson_ext
   erubis (~> 2.7.0)
   fakeweb
-  gatherer-scraper (= 0.0.1)!
+  gatherer-scraper!
   mongoid
   nokogiri
   padrino (= 0.10.7)
