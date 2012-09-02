@@ -1,11 +1,42 @@
 <div class="row">
   <div class="twelve columns" align="center">
     <h1>MTG Pack Generator</h1>
-    <a href="#" class="medium button" id="reloadButton">リロード</a>
+  </div>
+  <div class="twelve columns" align="center">
+
+    <div class='row'>
+      <div class='six columns'>
+        <form class='custom'>
+          <label for="cardSetDropdown">Card Set</label>
+          <select style="display:none;" id="cardSetDropdown">
+            <% CardProperty::SUPPORTING_EXPANSION_LIST.each do |card_set| %>
+              <% unless card_set == :'Time Spiral "Timeshifted"' %>
+                <% if card_set == CardProperty::SUPPORTING_EXPANSION_LIST.last %>
+                  <option SELECTED><%=h card_set %></option>
+                <% else %>
+                  <option><%=h card_set %></option>
+                <% end %>
+              <% end %>
+            <% end %>
+          </select>
+        </form>
+      </div>
+
+      <div class='six columns'>
+        <a href="#" class="medium button" id="reloadButton">Reload</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="twelve columns" align="center">
     <div id="boosterPack"></div>
   </div>
 </div>
 <script type="text/template" id="card-image">
-<img src="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid={{ multiverseid }}&type=card">
+<img width='223' height='310' src="{{ card_image_url }}">
+</script>
+<%= javascript_include_tag 'jquery.foundation.forms' %>
+<script type='text/javascript'>
+$(document).foundationCustomForms();
 </script>
 <%= javascript_include_tag 'index' %>

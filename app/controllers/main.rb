@@ -2,14 +2,12 @@ MtgPackGenerator.controller do
   get :index do
     render 'index'
   end
-  get :cardproperty do
-    CardProperty.where(expansion: 'Magic 2013').map do |card_property|
+
+  get :card_property do
+    CardProperty.where(expansion: params[:card_set]).map do |card_property|
       { rarity: card_property.rarity,
+        card_image_url: card_property.card_image_url.to_s,
         multiverseid: card_property.multiverseid }
     end.to_json
-    #M12CardProperty.only(:multiverseid).map {|cp| cp.multiverseid}.to_json
-  end
-  get :cardproperty, with: :multiverseid do
-    CardProperty.where(multiverseid: params[:multiverseid]).first.to_json
   end
 end
