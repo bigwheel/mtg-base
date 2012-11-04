@@ -104,10 +104,11 @@ MtgPackGenerator.controller do
     append_condition_at_text(criteria, :artist)
 
     content_type 'application/json'
-    if criteria.count == CardProperty.count
+    result = if criteria.count == CardProperty.count
       {}.to_json
     else
       criteria.map { |cp| cp.as_document }.to_json
     end
+    halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
   end
 end
