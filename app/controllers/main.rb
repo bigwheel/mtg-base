@@ -45,6 +45,8 @@ MtgPackGenerator.controller do
   get :search do
     criteria = CardProperty.criteria
 
+    params.delete_if { |k, v| v == '' }
+
     append_condition_equal(criteria, :multiverseid)
 
     append_condition_at_text(criteria, :card_name)
