@@ -107,7 +107,7 @@ MtgPackGenerator.controller do
 
     content_type 'application/json'
     result = if criteria.count == CardProperty.count
-      {}.to_json
+      [].to_json
     else
       criteria.map { |cp|
         hashed = cp.as_document
