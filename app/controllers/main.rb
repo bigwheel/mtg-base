@@ -109,7 +109,16 @@ MtgPackGenerator.controller do
     result = if criteria.count == CardProperty.count
       {}.to_json
     else
-      criteria.map { |cp| cp.as_document }.to_json
+      criteria.map { |cp|
+        hashed = cp.as_document
+        param_name = 'result_filter'
+        if params.has_key?(param_name) && params[param_name].is_a?(Hash)
+          return_attribute = params[param_name].values
+          hashed.select { |k,v| return_attribute.include? k }
+        else
+          hashed
+        end
+      }.to_json
     end
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
   end
