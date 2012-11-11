@@ -59,7 +59,13 @@ $(function () {
         $('#cardSetDropdown').off('change');
         $("#reloadButton").off('click');
 
-        $.getJSON('/card_property', {card_set: $('#cardSetDropdown').val()}, function (data) {
+        var params = {
+            expansion: $('#cardSetDropdown').val(),
+            'result_filter[0]': 'rarity',
+            'result_filter[1]': 'card_image_url',
+            'result_filter[2]': 'multiverseid'
+        };
+        $.getJSON('/search', params, function (data) {
             var cardPropertyCollection = new Backbone.Collection();
             _.each(data, function (result) {
                 cardPropertyCollection.add(new Backbone.Model(result));
