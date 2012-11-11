@@ -3,6 +3,30 @@ MtgPackGenerator.controller do
     render 'index'
   end
 
+  get :decklist do
+    render 'decklist'
+  end
+
+  post :jsonize do
+    result = params['cards_of_deck'].split(/\r\n/).map { |line|
+      if /\A(?<number_of_cards>\d*?) (?<card_name>.*)\Z/ =~ line
+        result_card = CardProperty.where(card_name: card_name).first
+        if result_card
+          {
+            number_of_cards: number_of_cards,
+            card_property: result_card.as_document
+          }
+        else
+          nil
+        end
+      else
+        nil
+      end
+    }.keep_if { |v| v }.to_json
+    content_type 'application/json'
+    halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
+  end
+
   helpers do
     def append_condition(criteria, key_name)
       if params.has_key?(key_name.to_s)
