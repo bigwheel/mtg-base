@@ -38,14 +38,17 @@ MtgPackGenerator.controller do
     number_of_card = CardProperty.fields.keys.map { |keyname|
       self.get_length(params[keyname])
     }.max
-    (0...number_of_card).each do |index|
+
+    content_type 'application/json'
+    (0...number_of_card).map { |index|
       query = {}
       CardProperty.fields.keys.each do |keyname|
         if params[keyname].is_a? Array
           query[keyname] = params[keyname][index]
         end
       end
-    end
+      CardSearchService.search(query).last.as_document
+    }.to_json
   end
 
   get :search do
