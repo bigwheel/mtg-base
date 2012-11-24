@@ -1,4 +1,30 @@
 class CardSearchService
+  QUERY_KEYNAME = {
+    :multiverseid => :multiverseid,
+    :card_name => :card_name,
+    # mana_cost: mana_cost, # don't forget when enable mana_cost query
+    :converted_mana_cost => :converted_mana_cost,
+    :'type.supertypes' => :'type.supertypes',
+    :'type.cardtypes' => :'type.cardtypes',
+    :'type.subtypes' => :'type.subtypes',
+    :card_text => :card_text,
+    :flavor_text => :flavor_text,
+    :watermark => :watermark,
+    :'color_indicator' => :'color_indicator',
+    :'p_t.power' => :'p_t.power',
+    :'p_t.toughness' => :'p_t.toughness',
+    :loyalty => :loyalty,
+    :expansion => :expansion,
+    :rarity => :rarity,
+    :'all_sets' => :'all_sets',
+    :'card_number.number' => :'card_number.number',
+    :'card_number.face' => :'card_number.face',
+    :artist => :artist,
+
+    # elements only query parameters
+    :result_filter => :result_filter,
+  }
+
   class << self
     def search(query)
       # TODO: rewrite as non side-effect
@@ -44,8 +70,9 @@ class CardSearchService
 
     private
     def append_condition(query, criteria, key_name)
-      if query.has_key?(key_name.to_s)
-        criteria.merge! yield(query[key_name.to_s])
+      key_name_str = QUERY_KEYNAME[key_name].to_s
+      if query.has_key?(key_name_str)
+        criteria.merge! yield(query[key_name_str])
       end
     end
 
@@ -67,8 +94,9 @@ class CardSearchService
     end
 
     def append_condition_all(query, criteria, key_name)
-      if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
-        criteria.merge! CardProperty.all(key_name => query[key_name.to_s].values.map { |a| a.to_sym } )
+      key_name_str = QUERY_KEYNAME[key_name].to_s
+      if query.has_key?(key_name_str) && query[key_name_str].is_a?(Hash)
+        criteria.merge! CardProperty.all(QUERY_KEYNAME[key_name] => query[key_name_str].values.map { |a| a.to_sym } )
       end
     end
 
