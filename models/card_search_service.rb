@@ -1,24 +1,14 @@
 class CardSearchService
   class << self
     def search(query)
+      # TODO: rewrite as non side-effect
+      query.delete_if { |k, v| v == '' }
+
       criteria = CardProperty.criteria
 
       append_condition_equal(query, criteria, :multiverseid)
       append_condition_at_text(query, criteria, :card_name)
-
-      # TODO implement mana_cost query
-      #    key_name = :mana_cost
-      #    if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
-      #      symbols = query[key_name.to_s].values.map do |sym|
-      #        # Refer attribute/mana_cost.rb L101 in GathererScraper gem
-      #        p sym
-      #        p sym =~ /\{(0|[1-9]\d*)\}/
-      #        sym =~ /\{(0|[1-9]\d*)\}/ ? sym.to_i : sym.to_sym
-      #      end
-      #      p symbols
-      #      criteria.merge! CardProperty.all(key_name => symbols)
-      #    end
-
+      append_condition_for_mana_cost(query, criteria)
       append_condition_equal(query, criteria, :converted_mana_cost)
       append_condition_all(query, criteria, :'type.supertypes')
       append_condition_all(query, criteria, :'type.cardtypes')
@@ -32,21 +22,8 @@ class CardSearchService
       append_condition_equal(query, criteria, :loyalty)
       append_condition_equal(query, criteria, :expansion)
       append_condition_equal(query, criteria, :rarity)
-
-      key_name = :'all_sets'
-      if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
-        query[key_name.to_s].values.each do |all_set|
-          condition = {}
-          condition[:set_name] = all_set[:set_name.to_s].to_sym if all_set.has_key?(:set_name.to_s)
-          condition[:rarity] = all_set[:rarity.to_s].to_sym if all_set.has_key?(:rarity.to_s)
-          criteria.merge! CardProperty.elem_match(key_name => condition)
-        end
-      end
-
-      key_name = :'card_number.number'
-      if query.has_key?(key_name.to_s)
-        criteria.merge! CardProperty.where(key_name => query[key_name.to_s].to_i)
-      end
+      append_condition_for_all_sets(query, criteria)
+      append_condition_for_card_number_number(query, criteria)
       append_condition_equal(query, criteria, :'card_number.face')
       append_condition_at_text(query, criteria, :artist)
 
@@ -81,6 +58,40 @@ class CardSearchService
       if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
         criteria.merge! CardProperty.all(key_name => query[key_name.to_s].values.map { |a| a.to_sym } )
       end
+    end
+
+    def append_condition_for_all_sets(query, criteria)
+      key_name = :'all_sets'
+      if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
+        query[key_name.to_s].values.each do |all_set|
+          condition = {}
+          condition[:set_name] = all_set[:set_name.to_s].to_sym if all_set.has_key?(:set_name.to_s)
+          condition[:rarity] = all_set[:rarity.to_s].to_sym if all_set.has_key?(:rarity.to_s)
+          criteria.merge! CardProperty.elem_match(key_name => condition)
+        end
+      end
+    end
+
+    def append_condition_for_card_number_number(query, criteria)
+      key_name = :'card_number.number'
+      if query.has_key?(key_name.to_s)
+        criteria.merge! CardProperty.where(key_name => query[key_name.to_s].to_i)
+      end
+    end
+
+    def append_condition_for_mana_cost(query, criteria)
+      # TODO: implement mana_cost query
+      #    key_name = :mana_cost
+      #    if query.has_key?(key_name.to_s) && query[key_name.to_s].is_a?(Hash)
+      #      symbols = query[key_name.to_s].values.map do |sym|
+      #        # Refer attribute/mana_cost.rb L101 in GathererScraper gem
+      #        p sym
+      #        p sym =~ /\{(0|[1-9]\d*)\}/
+      #        sym =~ /\{(0|[1-9]\d*)\}/ ? sym.to_i : sym.to_sym
+      #      end
+      #      p symbols
+      #      criteria.merge! CardProperty.all(key_name => symbols)
+      #    end
     end
   end
 end
