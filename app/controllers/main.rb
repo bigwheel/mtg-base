@@ -41,6 +41,8 @@ MtgPackGenerator.controller do
   end
 
   get :search do
+    params.delete_if { |k, v| v == '' }
+
     result = CardSearchService.search(params)
     content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
