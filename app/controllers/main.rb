@@ -121,21 +121,15 @@ MtgPackGenerator.controller do
 
     append_condition_at_text(criteria, :artist)
 
-    content_type 'application/json'
+    # TODO: delete after to implement search result paging
     result = if criteria.count == CardProperty.count
       [].to_json
     else
-      criteria.map { |cp|
-        hashed = cp.as_document
-        param_name = 'result_filter'
-        if params.has_key?(param_name) && params[param_name].is_a?(Hash)
-          return_attribute = params[param_name].values
-          hashed.select { |k,v| return_attribute.include? k }
-        else
-          hashed
-        end
+      criteria.only(params['result_filter'].values).map { |cp|
+        cp.as_document.delete_if { |k| k == '_id' }
       }.to_json
     end
+    content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
   end
 end
