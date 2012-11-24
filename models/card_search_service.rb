@@ -30,6 +30,18 @@ class CardSearchService
       criteria
     end
 
+    # remember that search-function result is criteria
+    # however this function returns Array of Hash
+    def search_with_filtering(query)
+      criteria = search(query)
+      append_condition(query, criteria, :result_filter) do |result_filter|
+        CardProperty.only(result_filter.values)
+      end
+      criteria.map { |cp|
+        cp.as_document.delete_if { |k| k == '_id' }
+      }
+    end
+
     private
     def append_condition(query, criteria, key_name)
       if query.has_key?(key_name.to_s)
