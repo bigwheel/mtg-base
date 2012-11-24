@@ -43,7 +43,17 @@ MtgPackGenerator.controller do
   get :search do
     params.delete_if { |k, v| v == '' }
 
-    result = CardSearchService.search(params)
+    criteria = CardSearchService.search(params)
+
+    # TODO: delete after to implement search result paging
+    result = if criteria.count == CardProperty.count
+               [].to_json
+             else
+               criteria.only(params['result_filter'].values).map { |cp|
+                 cp.as_document.delete_if { |k| k == '_id' }
+               }.to_json
+             end
+
     content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result
   end

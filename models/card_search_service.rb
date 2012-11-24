@@ -4,7 +4,6 @@ class CardSearchService
       criteria = CardProperty.criteria
 
       append_condition_equal(query, criteria, :multiverseid)
-
       append_condition_at_text(query, criteria, :card_name)
 
       # TODO implement mana_cost query
@@ -21,26 +20,17 @@ class CardSearchService
       #    end
 
       append_condition_equal(query, criteria, :converted_mana_cost)
-
       append_condition_all(query, criteria, :'type.supertypes')
       append_condition_all(query, criteria, :'type.cardtypes')
       append_condition_all(query, criteria, :'type.subtypes')
-
       append_condition_at_text(query, criteria, :card_text)
-
       append_condition_at_text(query, criteria, :flavor_text)
-
       append_condition_equal(query, criteria, :watermark)
-
       append_condition_all(query, criteria, :'color_indicator')
-
       append_condition_equal(query, criteria, :'p_t.power')
       append_condition_equal(query, criteria, :'p_t.toughness')
-
       append_condition_equal(query, criteria, :loyalty)
-
       append_condition_equal(query, criteria, :expansion)
-
       append_condition_equal(query, criteria, :rarity)
 
       key_name = :'all_sets'
@@ -58,17 +48,9 @@ class CardSearchService
         criteria.merge! CardProperty.where(key_name => query[key_name.to_s].to_i)
       end
       append_condition_equal(query, criteria, :'card_number.face')
-
       append_condition_at_text(query, criteria, :artist)
 
-      # TODO: delete after to implement search result paging
-      result = if criteria.count == CardProperty.count
-                 [].to_json
-               else
-                 criteria.only(query['result_filter'].values).map { |cp|
-                   cp.as_document.delete_if { |k| k == '_id' }
-                 }.to_json
-               end
+      criteria
     end
 
     private
