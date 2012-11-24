@@ -1,34 +1,5 @@
 class CardSearchService
   class << self
-    def append_condition(params, criteria, key_name)
-      if params.has_key?(key_name.to_s)
-        criteria.merge! yield(params[key_name.to_s])
-      end
-    end
-
-    def append_condition_at_text(params, criteria, key_name)
-      append_condition(params, criteria, key_name) do |param|
-        begin
-          regexp = Regexp.compile(param, Regexp::IGNORECASE)
-        rescue RegexpError
-          halt 400
-        end
-        CardProperty.where(key_name => regexp)
-      end
-    end
-
-    def append_condition_equal(params, criteria, key_name)
-      append_condition(params, criteria, key_name) do |param|
-        CardProperty.where(key_name => param)
-      end
-    end
-
-    def append_condition_all(params, criteria, key_name)
-      if params.has_key?(key_name.to_s) && params[key_name.to_s].is_a?(Hash)
-        criteria.merge! CardProperty.all(key_name => params[key_name.to_s].values.map { |a| a.to_sym } )
-      end
-    end
-
     def search(params)
       criteria = CardProperty.criteria
 
@@ -100,6 +71,36 @@ class CardSearchService
                    cp.as_document.delete_if { |k| k == '_id' }
                  }.to_json
                end
+    end
+
+    private
+    def append_condition(params, criteria, key_name)
+      if params.has_key?(key_name.to_s)
+        criteria.merge! yield(params[key_name.to_s])
+      end
+    end
+
+    def append_condition_at_text(params, criteria, key_name)
+      append_condition(params, criteria, key_name) do |param|
+        begin
+          regexp = Regexp.compile(param, Regexp::IGNORECASE)
+        rescue RegexpError
+          halt 400
+        end
+        CardProperty.where(key_name => regexp)
+      end
+    end
+
+    def append_condition_equal(params, criteria, key_name)
+      append_condition(params, criteria, key_name) do |param|
+        CardProperty.where(key_name => param)
+      end
+    end
+
+    def append_condition_all(params, criteria, key_name)
+      if params.has_key?(key_name.to_s) && params[key_name.to_s].is_a?(Hash)
+        criteria.merge! CardProperty.all(key_name => params[key_name.to_s].values.map { |a| a.to_sym } )
+      end
     end
   end
 end
