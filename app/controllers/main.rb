@@ -58,6 +58,14 @@ MtgPackGenerator.controller do
     end
   end
 
+  post :get_card_details do
+    card_names = params[:card_name.to_s]
+    halt 400 unless card_names.is_a? Array
+    card_names.map do |card_name|
+      card_name
+    end.join("+\n+")
+  end
+
   get :search do
     criteria = CardProperty.criteria
 
