@@ -10,7 +10,7 @@ MtgPackGenerator.controller do
   post :jsonize do
     result = params['cards_of_deck'].split(/\r\n/).map { |line|
       if /\A(?<number_of_cards>\d*?) (?<card_name>.*)\Z/ =~ line
-        result_card = CardProperty.where(card_name: card_name).first
+        result_card = CardProperty.where(card_name: card_name).last
         if result_card
           {
             number_of_cards: number_of_cards,
