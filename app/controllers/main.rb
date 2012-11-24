@@ -59,11 +59,16 @@ MtgPackGenerator.controller do
   end
 
   post :get_card_details do
-    card_names = params[:card_name.to_s]
-    halt 400 unless card_names.is_a? Array
-    card_names.map do |card_name|
-      card_name
-    end.join("+\n+")
+    def self.get_length obj
+      if obj.is_a? Array
+        obj.size
+      else
+        0
+      end
+    end
+    CardProperty.fields.keys.map { |keyname|
+      self.get_length(params[keyname])
+    }.max
   end
 
   get :search do
