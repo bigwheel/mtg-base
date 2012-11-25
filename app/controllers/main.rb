@@ -28,8 +28,17 @@ MtgPackGenerator.controller do
   end
 
   post :get_card_details do
-    result = params[:'card_list'.to_s].map { |unused, card_query|
-      CardSearchService.search_with_filtering(card_query).last
+    begin
+      card_list = params[:'card_list'.to_s].sort { |lhs, rhs|
+        lhs[0] <=> rhs[0]
+      }
+    rescue TypeError
+      halt 400, 'index of card_list should be integer and successive'
+    rescue ArgumentError
+      halt 400, 'index of card_list should be integer and successive'
+    end
+    result = card_list.map { |card|
+      CardSearchService.search_with_filtering(card[1]).last
     }
     content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result.to_json
