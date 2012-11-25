@@ -28,26 +28,9 @@ MtgPackGenerator.controller do
   end
 
   post :get_card_details do
-    def self.get_length obj
-      if obj.is_a? Array
-        obj.size
-      else
-        0
-      end
-    end
-    number_of_card = CardSearchService::QUERY_KEYNAME.keys.map { |keyname|
-      self.get_length(params[keyname])
-    }.max
-
     content_type 'application/json'
-    (0...number_of_card).map { |index|
-      query = {}
-      CardSearchService::QUERY_KEYNAME.keys.each do |keyname|
-        if params[keyname].is_a? Array
-          query[keyname] = params[keyname][index]
-        end
-      end
-      CardSearchService.search_with_filtering(query).last
+    params[:'card_list'.to_s].map { |unused, card_query|
+      CardSearchService.search_with_filtering(card_query).last
     }.to_json
   end
 
