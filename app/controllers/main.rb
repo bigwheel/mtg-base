@@ -28,10 +28,11 @@ MtgPackGenerator.controller do
   end
 
   post :get_card_details do
-    content_type 'application/json'
-    params[:'card_list'.to_s].map { |unused, card_query|
+    result = params[:'card_list'.to_s].map { |unused, card_query|
       CardSearchService.search_with_filtering(card_query).last
-    }.to_json
+    }
+    content_type 'application/json'
+    halt 200, { 'Access-Control-Allow-Origin' => '*' }, result.to_json
   end
 
   get :search do
