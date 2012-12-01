@@ -30,7 +30,7 @@ MtgPackGenerator.controller do
   post :get_card_details do
     begin
       card_list = params[:'card_list'.to_s].sort { |lhs, rhs|
-        lhs[0] <=> rhs[0]
+        lhs[0].to_i <=> rhs[0].to_i
       }
     rescue TypeError
       halt 400, 'index of card_list should be integer and successive'
