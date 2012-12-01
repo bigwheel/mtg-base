@@ -26,21 +26,23 @@ class CardSearchService
   }
 
   class << self
-    def search(query)
+    def search(query, strict = false)
       # TODO: rewrite as non side-effect
       query.delete_if { |k, v| v == '' }
 
       criteria = CardProperty.criteria
 
+      append_condition_for_text = method(strict ? :append_condition_equal : :append_condition_at_text)
+
       append_condition_equal(query, criteria, :multiverseid)
-      append_condition_at_text(query, criteria, :card_name)
+      append_condition_for_text.call(query, criteria, :card_name)
       append_condition_for_mana_cost(query, criteria)
       append_condition_equal(query, criteria, :converted_mana_cost)
       append_condition_all(query, criteria, :'type.supertypes')
       append_condition_all(query, criteria, :'type.cardtypes')
       append_condition_all(query, criteria, :'type.subtypes')
-      append_condition_at_text(query, criteria, :card_text)
-      append_condition_at_text(query, criteria, :flavor_text)
+      append_condition_for_text.call(query, criteria, :card_text)
+      append_condition_for_text.call(query, criteria, :flavor_text)
       append_condition_equal(query, criteria, :watermark)
       append_condition_all(query, criteria, :'color_indicator')
       append_condition_equal(query, criteria, :'p_t.power')
@@ -51,15 +53,15 @@ class CardSearchService
       append_condition_for_all_sets(query, criteria)
       append_condition_for_card_number_number(query, criteria)
       append_condition_equal(query, criteria, :'card_number.face')
-      append_condition_at_text(query, criteria, :artist)
+      append_condition_for_text.call(query, criteria, :artist)
 
       criteria
     end
 
     # remember that search-function result is criteria
     # however this function returns Array of Hash
-    def search_with_filtering(query)
-      criteria = search(query)
+    def search_with_filtering(query, strict = false)
+      criteria = search(query, strict)
       append_condition(query, criteria, :result_filter) do |result_filter|
         CardProperty.only(result_filter.values)
       end

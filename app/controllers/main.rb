@@ -38,7 +38,7 @@ MtgPackGenerator.controller do
       halt 400, 'index of card_list should be integer and successive'
     end
     result = card_list.map { |card|
-      CardSearchService.search_with_filtering(card[1]).last
+      CardSearchService.search_with_filtering(card[1], true).last
     }
     content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result.to_json
