@@ -53,4 +53,21 @@ MtgPackGenerator.controller do
     content_type 'application/json'
     halt 200, { 'Access-Control-Allow-Origin' => '*' }, result.to_json
   end
+
+  get :expansion_code_to_fullname do
+    code = params['code']
+
+    unless code
+      halt 400, '"code" parameter is not given'
+    else
+      expansion_fullname =
+        ExpansionCodeAndFullnameMapping.code_to_fullname code
+
+      unless expansion_fullname
+        halt 404, 'given code is not found'
+      else
+        halt 200, expansion_fullname
+      end
+    end
+  end
 end
