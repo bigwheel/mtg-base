@@ -48,7 +48,7 @@ module GathererScraper::Attribute
 
     class << self
       def demongoize(object)
-        new(object["set_name"], object["rarity"])
+        new(object[:set_name], object[:rarity])
       end
       def mongoize(object)
         object.mongoize
@@ -89,7 +89,7 @@ module GathererScraper::Attribute
     class << self
       def demongoize(object)
         if object
-          new(object["number"], object["face"])
+          new(object[:number], object[:face])
         else
           object
         end
@@ -111,7 +111,7 @@ module GathererScraper::Attribute
     class << self
       def demongoize(object)
         if object
-          new(object["power"], object["toughness"])
+          new(object[:power], object[:toughness])
         else
           object
         end
@@ -132,7 +132,7 @@ module GathererScraper::Attribute
 
     class << self
       def demongoize(object)
-        new(object["supertypes"], object["cardtypes"], object["subtypes"])
+        new(object[:supertypes], object[:cardtypes], object[:subtypes])
       end
       def mongoize(object)
         object.mongoize
