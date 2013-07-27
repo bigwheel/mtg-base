@@ -39,3 +39,6 @@ gem 'vcr'
 gem 'pry'
 gem 'pry-padrino'
 gem 'gatherer-scraper', git: 'git://github.com/bigwheel/gatherer-scraper.git'
+
+# Force Tilt 1.3 to avoid resolver bug: https://github.com/carlhuda/bundler/issues/2464
+gem 'tilt', '1.3.7'

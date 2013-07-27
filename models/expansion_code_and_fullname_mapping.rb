@@ -75,7 +75,8 @@ class ExpansionCodeAndFullnameMapping
     'M13' => 'Magic 2013',
     'RTR' => 'Return to Ravnica',
     'GTC' => 'Gatecrash',
-    'DGM' => 'Dragon\'s Maze'
+    'DGM' => 'Dragon\'s Maze',
+    'M14' => 'Magic 2014 Core Set'
   }
 
   def self.code_to_fullname code
